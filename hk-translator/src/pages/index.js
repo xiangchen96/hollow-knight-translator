@@ -8,6 +8,19 @@ import Flags from '../components/flags'
 const VAR_PATTERN = /name="([^"]*)"/
 const TEXT_PATTERN = />(.*)</
 
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+
+    name = name.replace(/[\[\]]/g, "\\$&");
+    let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+    let results = regex.exec(url);
+
+    if (!results) return null;
+    if (!results[2]) return '';
+
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
 export default class IndexPage extends Component {
 
   constructor(props) {
@@ -20,7 +33,7 @@ export default class IndexPage extends Component {
     }
   }
 
-  searchVariable() {
+  search() {
     const assets = this.assets
     const { inputText } = this.state
     if (inputText === "") {
@@ -30,7 +43,6 @@ export default class IndexPage extends Component {
       for (let i = 0; i < assets.length; i += 1) {
         if (assets[i].toLowerCase().includes(inputText.toLowerCase())) {
           let match = VAR_PATTERN.exec(assets[i])
-          if (!match) console.log(assets[i]);
           if (match && match[1].length > 0 && variables.indexOf(match[1]) < 0) {
             variables.push(match[1])
           }
@@ -55,7 +67,7 @@ export default class IndexPage extends Component {
         if (line.startsWith("LANGUAGE")) {
           currentLanguage = line.substring(10)
         }
-        if (line.includes(variables[0])) {
+        if (line.includes(`"${variables[0]}"`)) {
            if (selectedLanguages.size === 0 || selectedLanguages.has(currentLanguage)) {
               let match = TEXT_PATTERN.exec(line);
               if (match && match[1].length > 0) {
@@ -65,6 +77,7 @@ export default class IndexPage extends Component {
           }
         }
       })
+      outputText = outputText.replace(/&quot;/g, '"')
       this.setState({ outputText })
     }
   }
@@ -74,6 +87,12 @@ export default class IndexPage extends Component {
     .then((r) => r.text())
     .then(text  => {
       this.assets = text.split('\n')
+      const inputText = getParameterByName("search")
+      if (inputText) {
+        this.setState({ inputText }, () => {
+          this.search()
+        })
+      }
     })
   }
 
@@ -96,15 +115,20 @@ export default class IndexPage extends Component {
           flexDirection: 'column',
         }}>
           <TextField
-            inputProps={{
-              spellCheck: false,
-            }}
-            style={{ width: '100%'}}
+            inputProps={{ spellCheck: false }}
+            value={inputText}
+            style={{ width: '100%' }}
             label='Text to search for'
-            onChange={(e) => this.setState({inputText: e.target.value})}
+            onChange={(e) => this.setState({ inputText: e.target.value })}
             onKeyPress={(ev) => {
               if (ev.key === 'Enter') {
-                this.searchVariable(inputText)
+                let newurl = window.location.protocol + "//"
+                newurl += window.location.host + window.location.pathname
+                newurl += `?search=${inputText}`;
+                if (newurl !== window.location.href) {
+                    window.history.pushState({path:newurl},'',newurl);
+                }
+                this.search(inputText)
                 ev.preventDefault();
               }
             }}
