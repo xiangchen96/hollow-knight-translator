@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import TextField from '@material-ui/core/TextField'
+import NativeSelect from '@material-ui/core/NativeSelect'
 import { withPrefix } from 'gatsby'
 
 import Layout from '../components/layout'
@@ -11,7 +12,7 @@ const TEXT_PATTERN = />(.*)</
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
 
-    name = name.replace(/[\[\]]/g, "\\$&");
+    name = name.replace(/[\[\]]/g, "\\$&")
     let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
     let results = regex.exec(url);
 
@@ -30,6 +31,7 @@ export default class IndexPage extends Component {
       inputText: '',
       outputText: '',
       variables: [],
+      selectedVariable: '',
     }
   }
 
@@ -48,7 +50,6 @@ export default class IndexPage extends Component {
           }
         }
       }
-      console.log(variables)
       this.setState({variables}, () => this.searchText())
     }
   }
@@ -57,6 +58,7 @@ export default class IndexPage extends Component {
   searchText() {
     const assets = this.assets
     const { variables, selectedLanguages } = this.state
+    let selectedVariable = this.state.selectedVariable || variables[0]
     console.log(selectedLanguages);
     let currentLanguage
     let outputText = ''
@@ -67,7 +69,7 @@ export default class IndexPage extends Component {
         if (line.startsWith("LANGUAGE")) {
           currentLanguage = line.substring(10)
         }
-        if (line.includes(`"${variables[0]}"`)) {
+        if (line.includes(`"${selectedVariable}"`)) {
            if (selectedLanguages.size === 0 || selectedLanguages.has(currentLanguage)) {
               let match = TEXT_PATTERN.exec(line);
               if (match && match[1].length > 0) {
@@ -78,11 +80,13 @@ export default class IndexPage extends Component {
         }
       })
       outputText = outputText.replace(/&quot;/g, '"')
+      outputText = outputText.replace(/&lt;/g, '')
       this.setState({ outputText })
     }
   }
 
   componentDidMount() {
+    this._isMounted = true;
     fetch(withPrefix('/trimmedAssets.txt'))
     .then((r) => r.text())
     .then(text  => {
@@ -94,6 +98,14 @@ export default class IndexPage extends Component {
         })
       }
     })
+    window.onpopstate = ()=> {
+      if(this._isMounted && window.location.href.includes('search=')) {
+        const inputText = window.location.href.split('search=')[1]
+        this.setState({ inputText }, () => {
+          this.search()
+        })
+      }
+    }
   }
 
   onSelect = (value) => {
@@ -104,6 +116,30 @@ export default class IndexPage extends Component {
       selectedLanguages.add(value)
     }
     this.setState({ selectedLanguages }, this.searchText())
+  }
+
+  renderSelector = () => {
+    const { variables, selectedVariable } = this.state
+    let options = []
+    variables.forEach((a) => {
+      options.push(
+        <option key={a} value={a}>{a}</option>,
+      )
+    })
+    return (
+      <NativeSelect
+        value={selectedVariable}
+        style={{
+          marginTop: 20,
+        }}
+        required
+        onChange={(event) => {
+          this.setState({ selectedVariable: event.target.value}, () => this.search())
+        }}
+      >
+        {options}
+      </NativeSelect>
+    )
   }
 
   render() {
@@ -134,6 +170,7 @@ export default class IndexPage extends Component {
             }}
           />
           <Flags onSelect={this.onSelect} />
+          {this.renderSelector()}
           <TextField
             inputProps={{
               spellCheck: false,
@@ -141,7 +178,8 @@ export default class IndexPage extends Component {
             style={{ width: '100%', height: '100%', marginTop: 30}}
             multiline={true}
             value={outputText}
-            rows={40}
+            rows={200}
+            variant="filled"
           />
         </div>
       </Layout>

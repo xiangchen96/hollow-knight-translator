@@ -30,7 +30,8 @@
     "develop": "gatsby develop",
     "start": "npm run develop",
     "format": "prettier --write \"src/**/*.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "modules": "rm -rf node_modules && npm install"
   },
   "devDependencies": {
     "prettier": "^1.14.2"
