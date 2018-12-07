@@ -101,7 +101,7 @@ export default class IndexPage extends Component {
     window.onpopstate = ()=> {
       if(this._isMounted && window.location.href.includes('search=')) {
         const inputText = window.location.href.split('search=')[1]
-        this.setState({ inputText }, () => {
+        this.setState({ inputText, selectedVariable: '' }, () => {
           this.search()
         })
       }
@@ -134,7 +134,7 @@ export default class IndexPage extends Component {
         }}
         required
         onChange={(event) => {
-          this.setState({ selectedVariable: event.target.value}, () => this.search())
+          this.setState({ selectedVariable: event.target.value}, () => this.searchText())
         }}
       >
         {options}
@@ -162,9 +162,9 @@ export default class IndexPage extends Component {
                 newurl += window.location.host + window.location.pathname
                 newurl += `?search=${inputText}`;
                 if (newurl !== window.location.href) {
-                    window.history.pushState({path:newurl},'',newurl);
+                    window.history.pushState({path:newurl},'',newurl)
+                    this.setState({ selectedVariable: '' }, () => this.search())
                 }
-                this.search(inputText)
                 ev.preventDefault();
               }
             }}
