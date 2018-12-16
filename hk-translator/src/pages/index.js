@@ -37,6 +37,7 @@ export default class IndexPage extends Component {
 
   search() {
     const assets = this.assets
+    if (!assets) return
     const { inputText } = this.state
     if (inputText === "") {
       this.setState({ variables: [] })
