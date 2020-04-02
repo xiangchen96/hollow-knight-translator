@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import TextField from '@material-ui/core/TextField'
+import { TextField, Card, CardContent, Typography } from '@material-ui/core'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import { withPrefix } from 'gatsby'
 
@@ -28,7 +28,7 @@ export default class IndexPage extends Component {
     this.state = {
       selectedLanguages: new Set(),
       inputText: '',
-      outputText: '',
+      results: {},
       variables: [],
       selectedVariable: '',
     }
@@ -49,7 +49,7 @@ export default class IndexPage extends Component {
             match &&
             match[1].length > 0 &&
             variables.indexOf(match[1]) < 0 &&
-            match[1].toUpperCase() == match[1]
+            match[1].toUpperCase() === match[1]
           ) {
             variables.push(match[1])
           }
@@ -66,9 +66,9 @@ export default class IndexPage extends Component {
     let selectedVariable = this.state.selectedVariable || variables[0]
 
     let currentLanguage
-    let outputText = ''
+    let results = {}
     if (variables.length === 0) {
-      this.setState({ outputText: '' })
+      this.setState({ results })
     } else {
       assets.forEach(line => {
         if (line.startsWith('LANGUAGE')) {
@@ -81,15 +81,19 @@ export default class IndexPage extends Component {
           ) {
             let match = TEXT_PATTERN.exec(line)
             if (match && match[1].length > 0) {
-              outputText += `(${currentLanguage})`
-              outputText += `\t${match[1]}\n\n`
+              let text = `\t${match[1]}\n\n`
+                .replace(/&quot;/g, '"')
+                .replace(/&lt;/g, '')
+              if (results[currentLanguage]) {
+                results[currentLanguage].push(text)
+              } else {
+                results[currentLanguage] = [text]
+              }
             }
           }
         }
       })
-      outputText = outputText.replace(/&quot;/g, '"')
-      outputText = outputText.replace(/&lt;/g, '')
-      this.setState({ outputText })
+      this.setState({ results })
     }
   }
 
@@ -126,6 +130,60 @@ export default class IndexPage extends Component {
     this.setState({ selectedLanguages }, this.searchText())
   }
 
+  renderIcon = value => {
+    const lowerCaseSuffix = ['JP', 'FR', 'RU', 'PT', 'ES', 'IT', 'DE']
+    let flagSuffix
+    if (lowerCaseSuffix.indexOf(value) >= 0) {
+      flagSuffix = value.toLowerCase()
+    } else {
+      switch (value) {
+        case 'SC':
+          flagSuffix = 'cn'
+          break
+        case 'KO':
+          flagSuffix = 'kr'
+          break
+        case 'JA':
+          flagSuffix = 'jp'
+          break
+        case 'EN':
+          flagSuffix = 'gb'
+          break
+        case 'BP':
+          flagSuffix = 'br'
+          break
+        case 'ZH':
+          flagSuffix = 'cn'
+          break
+        default:
+          flagSuffix = 'cn'
+      }
+    }
+    return <span className={`flag-icon flag-icon-${flagSuffix}`} />
+  }
+
+  renderResults = () => {
+    const { results } = this.state
+    const cards = []
+    Object.entries(results).forEach(([k, v]) => {
+      cards.push(
+        <Card style={{ margin: 10, width: 200 }}>
+          <CardContent>
+            <div style={{ display: 'flex' }}>
+              {this.renderIcon(k)}
+              <Typography style={{ marginLeft: 10 }}>{k}</Typography>
+            </div>
+            <hr />
+            {v.map(v => (
+              <Typography>{v}</Typography>
+            ))}
+          </CardContent>
+        </Card>
+      )
+    })
+    return <div style={{ display: 'flex', flexWrap: 'wrap' }}>{cards}</div>
+  }
+
   renderSelector = () => {
     const { variables, selectedVariable } = this.state
     let options = []
@@ -155,7 +213,7 @@ export default class IndexPage extends Component {
   }
 
   render() {
-    const { outputText, inputText } = this.state
+    const { inputText } = this.state
     return (
       <Layout>
         <div
@@ -185,16 +243,7 @@ export default class IndexPage extends Component {
           />
           <Flags onSelect={this.onSelect} />
           {this.renderSelector()}
-          <TextField
-            inputProps={{
-              spellCheck: false,
-            }}
-            style={{ width: '100%', height: '100%', marginTop: 30 }}
-            multiline={true}
-            value={outputText}
-            rows={200}
-            variant="filled"
-          />
+          {this.renderResults()}
         </div>
       </Layout>
     )

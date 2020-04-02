@@ -55,7 +55,7 @@ export default class Flag extends Component {
         }}
         onClick={() => {
           this.setState({ checked: !checked })
-          onSelect(value)
+          if (onSelect) onSelect(value)
         }}
       >
         <Checkbox value={value} checked={checked} />
