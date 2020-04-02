@@ -1,15 +1,14 @@
 import React, { Component } from 'react'
-import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox'
 
 export default class Flag extends Component {
-
   state = {
-    checked: false
+    checked: false,
   }
 
-  renderIcon(){
+  renderIcon() {
     const { value } = this.props
-    const lowerCaseSuffix = ["JP", "FR", "RU", "PT", "ES", "IT", "DE"]
+    const lowerCaseSuffix = ['JP', 'FR', 'RU', 'PT', 'ES', 'IT', 'DE']
     let flagSuffix
     if (lowerCaseSuffix.indexOf(value) >= 0) {
       flagSuffix = value.toLowerCase()
@@ -17,22 +16,22 @@ export default class Flag extends Component {
       switch (value) {
         case 'SC':
           flagSuffix = 'cn'
-          break;
+          break
         case 'KO':
           flagSuffix = 'kr'
-          break;
+          break
         case 'JA':
           flagSuffix = 'jp'
-          break;
+          break
         case 'EN':
           flagSuffix = 'gb'
-          break;
+          break
         case 'BP':
           flagSuffix = 'br'
-          break;
+          break
         case 'ZH':
           flagSuffix = 'cn'
-          break;
+          break
         default:
           flagSuffix = 'cn'
       }
@@ -41,20 +40,25 @@ export default class Flag extends Component {
     return <span className={className} />
   }
 
-  render(){
+  render() {
     const { value, onSelect } = this.props
     const { checked } = this.state
     return (
       <div
-        style={{ display: 'flex', maxHeight: 22, marginTop: 30 }}
+        role="button"
+        style={{
+          display: 'flex',
+          maxHeight: 22,
+          maxWidth: 100,
+          marginTop: 30,
+          cursor: 'pointer',
+        }}
         onClick={() => {
           this.setState({ checked: !checked })
           onSelect(value)
         }}
       >
-        <Checkbox value={value}
-          checked={checked}
-        />
+        <Checkbox value={value} checked={checked} />
         {this.renderIcon()}
         <p>{value}</p>
       </div>
