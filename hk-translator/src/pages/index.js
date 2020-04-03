@@ -239,6 +239,15 @@ export default class IndexPage extends Component {
             style={{ width: '100%' }}
             label="Text to search for"
             onChange={e => this.setState({ inputText: e.target.value })}
+            onBlur={() => {
+              let newurl = window.location.protocol + '//'
+              newurl += window.location.host + window.location.pathname
+              newurl += `?search=${inputText}`
+              if (newurl !== window.location.href) {
+                window.history.pushState({ path: newurl }, '', newurl)
+                this.setState({ selectedVariable: '' }, () => this.search())
+              }
+            }}
             onKeyPress={ev => {
               if (ev.key === 'Enter') {
                 let newurl = window.location.protocol + '//'
