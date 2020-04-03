@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
-import { TextField, Card, CardContent, Typography } from '@material-ui/core'
+import {
+  TextField,
+  Card,
+  CardContent,
+  Typography,
+  CardActionArea,
+} from '@material-ui/core'
 import NativeSelect from '@material-ui/core/NativeSelect'
 import { withPrefix } from 'gatsby'
 
@@ -28,9 +34,10 @@ export default class IndexPage extends Component {
     this.state = {
       selectedLanguages: new Set(),
       inputText: '',
-      results: {},
+      results: [],
       variables: [],
       selectedVariable: '',
+      showAlert: false,
     }
   }
 
@@ -66,7 +73,7 @@ export default class IndexPage extends Component {
     let selectedVariable = this.state.selectedVariable || variables[0]
 
     let currentLanguage
-    let results = {}
+    let results = []
     if (variables.length === 0) {
       this.setState({ results })
     } else {
@@ -84,11 +91,7 @@ export default class IndexPage extends Component {
               let text = `\t${match[1]}\n\n`
                 .replace(/&quot;/g, '"')
                 .replace(/&lt;/g, '')
-              if (results[currentLanguage]) {
-                results[currentLanguage].push(text)
-              } else {
-                results[currentLanguage] = [text]
-              }
+              results.push([currentLanguage, text])
             }
           }
         }
@@ -163,20 +166,28 @@ export default class IndexPage extends Component {
   }
 
   renderResults = () => {
-    const { results } = this.state
+    const { results, showAlert } = this.state
     const cards = []
-    Object.entries(results).forEach(([k, v]) => {
+    results.forEach(([k, v]) => {
+      v = v.trim()
       cards.push(
         <Card style={{ margin: 10, width: 200 }}>
           <CardContent>
-            <div style={{ display: 'flex' }}>
-              {this.renderIcon(k)}
-              <Typography style={{ marginLeft: 10 }}>{k}</Typography>
-            </div>
+            <CardActionArea
+              onClick={() =>
+                this.setState({ showAlert: true }, () => {
+                  navigator.clipboard.writeText(v)
+                  setTimeout(() => this.setState({ showAlert: false }), 1000)
+                })
+              }
+            >
+              <div style={{ display: 'flex' }}>
+                {this.renderIcon(k)}
+                <Typography style={{ marginLeft: 10 }}>{k}</Typography>
+              </div>
+            </CardActionArea>
             <hr />
-            {v.map(v => (
-              <Typography>{v}</Typography>
-            ))}
+            <Typography>{v}</Typography>
           </CardContent>
         </Card>
       )
@@ -213,7 +224,7 @@ export default class IndexPage extends Component {
   }
 
   render() {
-    const { inputText } = this.state
+    const { inputText, showAlert } = this.state
     return (
       <Layout>
         <div
@@ -243,6 +254,8 @@ export default class IndexPage extends Component {
           />
           <Flags onSelect={this.onSelect} />
           {this.renderSelector()}
+          {!showAlert && <Typography style={{ height: 20 }}></Typography>}
+          {showAlert && <Typography style={{ height: 20 }}>Copied!</Typography>}
           {this.renderResults()}
         </div>
       </Layout>
