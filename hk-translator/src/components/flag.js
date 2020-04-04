@@ -48,8 +48,8 @@ export default class Flag extends Component {
         role="button"
         style={{
           display: 'flex',
-          maxHeight: 22,
-          maxWidth: 100,
+          height: 22,
+          width: 120,
           marginTop: 30,
           cursor: 'pointer',
         }}

@@ -9,9 +9,8 @@ export default class Flags extends Component {
       <div
         style={{
           display: 'flex',
-          flexDirection: 'column',
+          flexDirection: 'row',
           flexWrap: 'wrap',
-          maxHeight: 150,
         }}
       >
         <link
