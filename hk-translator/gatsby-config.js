@@ -1,5 +1,5 @@
 module.exports = {
-  pathPrefix: '/projects/hk-translation',
+  pathPrefix: '/hollow-knight-translator',
   siteMetadata: {
     title: 'Hollow knight translator',
   },
