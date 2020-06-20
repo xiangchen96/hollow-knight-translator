@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Checkbox from '@material-ui/core/Checkbox'
 
 export default class Flag extends Component {
   state = {
@@ -45,22 +44,17 @@ export default class Flag extends Component {
     const { checked } = this.state
     return (
       <div
+        className={`flex flex-row justify-around rounded-full w-20 mx-3 my-2 px-3 py-1 hover:bg-gray-400 bg-gray-${
+          checked ? '400' : '200'
+        }`}
         role="button"
-        style={{
-          display: 'flex',
-          height: 22,
-          width: 120,
-          marginTop: 30,
-          cursor: 'pointer',
-        }}
         onClick={() => {
           this.setState({ checked: !checked })
           if (onSelect) onSelect(value)
         }}
       >
-        <Checkbox value={value} checked={checked} />
         {this.renderIcon()}
-        <p>{value}</p>
+        <p className="select-none">{value}</p>
       </div>
     )
   }

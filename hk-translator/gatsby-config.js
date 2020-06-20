@@ -4,6 +4,7 @@ module.exports = {
     title: 'Hollow knight translator',
   },
   plugins: [
+    'gatsby-plugin-postcss',
     'gatsby-plugin-react-helmet',
     {
       resolve: `gatsby-source-filesystem`,
@@ -12,7 +13,6 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    'gatsby-plugin-material-ui',
     'gatsby-transformer-sharp',
     'gatsby-plugin-sharp',
     {

@@ -6,17 +6,7 @@ export default class Flags extends Component {
   render() {
     const { onSelect } = this.props
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}
-      >
-        <link
-          rel="stylesheet"
-          href="https://cdn.rawgit.com/lipis/flag-icon-css/33ab3e40/css/flag-icon.min.css"
-        />
+      <div class="flex flex-row flex-wrap w-full justify-start flex-wrap py-2">
         <Flag value="JP" onSelect={onSelect} />
         <Flag value="FR" onSelect={onSelect} />
         <Flag value="RU" onSelect={onSelect} />

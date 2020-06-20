@@ -1,12 +1,4 @@
 import React, { Component } from 'react'
-import {
-  TextField,
-  Card,
-  CardContent,
-  Typography,
-  CardActionArea,
-} from '@material-ui/core'
-import NativeSelect from '@material-ui/core/NativeSelect'
 import { withPrefix } from 'gatsby'
 
 import Layout from '../components/layout'
@@ -166,15 +158,20 @@ export default class IndexPage extends Component {
   }
 
   renderResults = () => {
-    const { results } = this.state
+    const { results, showAlert } = this.state
     const cards = []
     results.forEach(([k, v]) => {
       v = v.trim()
       k = k.trim()
       cards.push(
-        <Card style={{ margin: 10, width: 200 }}>
-          <CardContent>
-            <CardActionArea
+        <div className="sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2">
+          <div
+            key={k + v}
+            className="bg-gray-200 rounded px-2 py-2 shadow h-full"
+          >
+            <div
+              role="button"
+              className="hover:bg-gray-400 hover:text-black text-gray-200 cursor-pointer px-2 rounded flex flex-row"
               onClick={() =>
                 this.setState({ showAlert: true }, () => {
                   navigator.clipboard.writeText(v)
@@ -182,18 +179,15 @@ export default class IndexPage extends Component {
                 })
               }
             >
-              <div style={{ display: 'flex' }}>
-                {this.renderIcon(k)}
-                <Typography style={{ marginLeft: 10 }}>{k}</Typography>
-              </div>
-            </CardActionArea>
-            <hr />
-            <Typography>{v}</Typography>
-          </CardContent>
-        </Card>
+              {this.renderIcon(k)}
+              <p className="px-1">{showAlert ? 'Copied!' : 'Copy text'}</p>
+            </div>
+            <p className="px-2 py-2">{v}</p>
+          </div>
+        </div>
       )
     })
-    return <div style={{ display: 'flex', flexWrap: 'wrap' }}>{cards}</div>
+    return <div className="flex flex-row flex-wrap">{cards}</div>
   }
 
   renderSelector = () => {
@@ -207,11 +201,9 @@ export default class IndexPage extends Component {
       )
     })
     return (
-      <NativeSelect
+      <select
+        className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
         value={selectedVariable}
-        style={{
-          marginTop: 20,
-        }}
         required
         onChange={event => {
           this.setState({ selectedVariable: event.target.value }, () =>
@@ -220,25 +212,26 @@ export default class IndexPage extends Component {
         }}
       >
         {options}
-      </NativeSelect>
+      </select>
     )
   }
 
   render() {
-    const { inputText, showAlert } = this.state
+    const { inputText } = this.state
     return (
       <Layout>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <TextField
-            inputProps={{ spellCheck: false }}
+        <div>
+          <label
+            className="block text-gray-700 text-sm font-bold mb-2"
+            for="text"
+          >
+            Text to search for
+          </label>
+          <input
+            id="text"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={inputText}
-            style={{ width: '100%' }}
-            label="Text to search for"
+            placeholder="Text"
             onChange={e => this.setState({ inputText: e.target.value })}
             onBlur={() => {
               let newurl = window.location.protocol + '//'
@@ -264,8 +257,6 @@ export default class IndexPage extends Component {
           />
           <Flags onSelect={this.onSelect} />
           {this.renderSelector()}
-          {!showAlert && <Typography style={{ height: 20 }}></Typography>}
-          {showAlert && <Typography style={{ height: 20 }}>Copied!</Typography>}
           {this.renderResults()}
         </div>
       </Layout>
