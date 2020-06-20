@@ -79,7 +79,7 @@ export default class IndexPage extends Component {
     } else {
       assets.forEach(line => {
         if (line.startsWith('LANGUAGE')) {
-          currentLanguage = line.substring(10)
+          currentLanguage = line.substring(10).trim()
         }
         if (line.includes(`"${selectedVariable}"`)) {
           if (
@@ -166,10 +166,11 @@ export default class IndexPage extends Component {
   }
 
   renderResults = () => {
-    const { results, showAlert } = this.state
+    const { results } = this.state
     const cards = []
     results.forEach(([k, v]) => {
       v = v.trim()
+      k = k.trim()
       cards.push(
         <Card style={{ margin: 10, width: 200 }}>
           <CardContent>
