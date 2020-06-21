@@ -160,15 +160,15 @@ export default class IndexPage extends Component {
   renderResults = () => {
     const { results, showAlert } = this.state
     const cards = []
-    results.forEach(([k, v]) => {
+    results.sort().forEach(([k, v]) => {
       v = v.trim()
       k = k.trim()
       cards.push(
-        <div className="flex-grow sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2">
-          <div
-            key={k + v}
-            className="bg-gray-200 rounded px-2 py-2 shadow h-full"
-          >
+        <div
+          key={k + v}
+          className="flex-grow sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2"
+        >
+          <div className="bg-gray-200 rounded px-2 py-2 shadow h-full">
             <div
               role="button"
               className="hover:bg-gray-400 hover:text-black text-gray-200 cursor-pointer px-2 rounded flex flex-row"
@@ -223,7 +223,7 @@ export default class IndexPage extends Component {
         <div>
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            for="text"
+            htmlFor="text"
           >
             Text to search for
           </label>
