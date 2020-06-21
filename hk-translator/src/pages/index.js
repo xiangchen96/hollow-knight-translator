@@ -164,7 +164,7 @@ export default class IndexPage extends Component {
       v = v.trim()
       k = k.trim()
       cards.push(
-        <div className="sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2">
+        <div className="flex-grow sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2">
           <div
             key={k + v}
             className="bg-gray-200 rounded px-2 py-2 shadow h-full"
