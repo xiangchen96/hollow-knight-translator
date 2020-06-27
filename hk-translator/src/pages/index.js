@@ -221,40 +221,23 @@ export default class IndexPage extends Component {
     return (
       <Layout>
         <div>
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="text"
-          >
-            Text to search for
-          </label>
-          <input
-            id="text"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={inputText}
-            placeholder="Text"
-            onChange={e => this.setState({ inputText: e.target.value })}
-            onBlur={() => {
-              let newurl = window.location.protocol + '//'
-              newurl += window.location.host + window.location.pathname
-              newurl += `?search=${inputText}`
-              if (newurl !== window.location.href) {
-                window.history.pushState({ path: newurl }, '', newurl)
-                this.setState({ selectedVariable: '' }, () => this.search())
-              }
-            }}
-            onKeyPress={ev => {
-              if (ev.key === 'Enter') {
-                let newurl = window.location.protocol + '//'
-                newurl += window.location.host + window.location.pathname
-                newurl += `?search=${inputText}`
-                if (newurl !== window.location.href) {
-                  window.history.pushState({ path: newurl }, '', newurl)
-                  this.setState({ selectedVariable: '' }, () => this.search())
-                }
-                ev.preventDefault()
-              }
-            }}
-          />
+          <form>
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="text"
+            >
+              Text to search for
+            </label>
+            <input
+              id="search"
+              type="text"
+              name="search"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              value={inputText}
+              placeholder="Text"
+              onChange={e => this.setState({ inputText: e.target.value })}
+            />
+          </form>
           <Flags onSelect={this.onSelect} />
           {this.renderSelector()}
           {this.renderResults()}
