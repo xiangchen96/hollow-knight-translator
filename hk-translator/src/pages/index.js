@@ -117,10 +117,13 @@ export default class IndexPage extends Component {
 
   onSelect = value => {
     const { selectedLanguages } = this.state
-    if (selectedLanguages.has(value)) {
-      selectedLanguages.delete(value)
-    } else {
-      selectedLanguages.add(value)
+    if (value === 'All') selectedLanguages.clear()
+    else {
+      if (selectedLanguages.has(value)) {
+        selectedLanguages.delete(value)
+      } else {
+        selectedLanguages.add(value)
+      }
     }
     this.setState({ selectedLanguages }, this.searchText())
   }
@@ -217,7 +220,7 @@ export default class IndexPage extends Component {
   }
 
   render() {
-    const { inputText } = this.state
+    const { inputText, selectedLanguages } = this.state
     return (
       <Layout>
         <div>
@@ -238,7 +241,10 @@ export default class IndexPage extends Component {
               onChange={e => this.setState({ inputText: e.target.value })}
             />
           </form>
-          <Flags onSelect={this.onSelect} />
+          <Flags
+            onSelect={this.onSelect}
+            selectedLanguages={selectedLanguages}
+          />
           {this.renderSelector()}
           {this.renderResults()}
         </div>

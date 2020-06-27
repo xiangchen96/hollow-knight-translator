@@ -4,7 +4,7 @@ import Flag from './flag'
 
 export default class Flags extends Component {
   render() {
-    const { onSelect } = this.props
+    const { onSelect, selectedLanguages } = this.props
     const langs = [
       'JP',
       'FR',
@@ -21,10 +21,16 @@ export default class Flags extends Component {
       'ZH',
     ]
     langs.sort()
+    langs.unshift('All')
     return (
       <div className="flex flex-row flex-wrap w-full justify-start flex-wrap py-2">
         {langs.map(k => (
-          <Flag key={k} value={k} onSelect={onSelect} />
+          <Flag
+            key={k}
+            value={k}
+            onSelect={onSelect}
+            selectedLanguages={selectedLanguages}
+          />
         ))}
       </div>
     )

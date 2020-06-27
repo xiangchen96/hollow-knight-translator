@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
 
 export default class Flag extends Component {
-  state = {
-    checked: false,
-  }
-
   renderIcon() {
     const { value } = this.props
     const lowerCaseSuffix = ['JP', 'FR', 'RU', 'PT', 'ES', 'IT', 'DE']
@@ -32,7 +28,7 @@ export default class Flag extends Component {
           flagSuffix = 'cn'
           break
         default:
-          flagSuffix = 'cn'
+          return null
       }
     }
     const className = `flag-icon flag-icon-${flagSuffix}`
@@ -40,16 +36,17 @@ export default class Flag extends Component {
   }
 
   render() {
-    const { value, onSelect } = this.props
-    const { checked } = this.state
+    const { value, onSelect, selectedLanguages } = this.props
+    const checked =
+      selectedLanguages.has(value) ||
+      (value === 'All' && selectedLanguages.size === 0)
     return (
       <div
-        className={`flex flex-row justify-around rounded-full w-20 mx-3 my-2 px-3 py-1 hover:bg-gray-400 bg-gray-${
+        className={`flex flex-row justify-around rounded-full w-20 mx-3 my-2 px-3 py-1 active:bg-gray-500 hover:bg-gray-400 bg-gray-${
           checked ? '400' : '200'
         }`}
         role="button"
         onClick={() => {
-          this.setState({ checked: !checked })
           if (onSelect) onSelect(value)
         }}
       >
