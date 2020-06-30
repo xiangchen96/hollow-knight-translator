@@ -15,7 +15,7 @@ function getParameterByName(name, url) {
     let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
     let results = regex.exec(url)
 
-    if (!results) return null
+    if (!results) return ''
     if (!results[2]) return ''
 
     return decodeURIComponent(results[2].replace(/\+/g, ' '))
