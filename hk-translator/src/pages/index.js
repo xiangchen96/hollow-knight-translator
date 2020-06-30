@@ -130,7 +130,10 @@ export default class IndexPage extends Component {
         selectedLanguages.push(value)
       }
     }
-    this.setState({ selectedLanguages }, this.searchText())
+    this.setState(
+      { selectedLanguages: [...selectedLanguages] },
+      this.searchText()
+    )
   }
 
   renderIcon = value => {
