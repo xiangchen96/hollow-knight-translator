@@ -8,29 +8,24 @@ const VAR_PATTERN = /name="([^"]*)"/
 const TEXT_PATTERN = />(.*)</
 
 function getParameterByName(name, url) {
-  if (typeof window !== `undefined`) {
-    if (!url) url = window.location.href
+  if (!url) url = window.location.href
 
-    name = name.replace(/[[\]]/g, '\\$&')
-    let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
-    let results = regex.exec(url)
+  name = name.replace(/[[\]]/g, '\\$&')
+  let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)')
+  let results = regex.exec(url)
 
-    if (!results) return ''
-    if (!results[2]) return ''
+  if (!results) return null
+  if (!results[2]) return ''
 
-    return decodeURIComponent(results[2].replace(/\+/g, ' '))
-  }
-  return ''
+  return decodeURIComponent(results[2].replace(/\+/g, ' '))
 }
 
 export default class IndexPage extends Component {
   constructor(props) {
     super(props)
-    let langs = getParameterByName('langs').split(',')
-    if (langs.length === 1 && langs[0] === '') langs = []
     this.state = {
-      selectedLanguages: langs,
-      inputText: getParameterByName('search'),
+      selectedLanguages: new Set(),
+      inputText: '',
       results: [],
       variables: [],
       selectedVariable: '',
@@ -80,8 +75,8 @@ export default class IndexPage extends Component {
         }
         if (line.includes(`"${selectedVariable}"`)) {
           if (
-            selectedLanguages.length === 0 ||
-            selectedLanguages.includes(currentLanguage)
+            selectedLanguages.size === 0 ||
+            selectedLanguages.has(currentLanguage)
           ) {
             let match = TEXT_PATTERN.exec(line)
             if (match && match[1].length > 0) {
@@ -104,10 +99,8 @@ export default class IndexPage extends Component {
       .then(text => {
         this.assets = text.split('\n')
         const inputText = getParameterByName('search')
-        let langs = getParameterByName('langs').split(',')
-        if (langs.length === 1 && langs[0] === '') langs = []
         if (inputText) {
-          this.setState({ inputText, selectedLanguages: langs }, () => {
+          this.setState({ inputText }, () => {
             this.search()
           })
         }
@@ -115,32 +108,24 @@ export default class IndexPage extends Component {
     window.onpopstate = () => {
       if (this._isMounted && window.location.href.includes('search=')) {
         const inputText = window.location.href.split('search=')[1]
-        let langs = getParameterByName('langs').split(',')
-        if (langs.length === 1 && langs[0] === '') langs = []
-        this.setState(
-          { inputText, selectedVariable: '', selectedLanguages: langs },
-          () => {
-            this.search()
-          }
-        )
+        this.setState({ inputText, selectedVariable: '' }, () => {
+          this.search()
+        })
       }
     }
   }
 
   onSelect = value => {
-    let { selectedLanguages } = this.state
-    if (value === 'All') selectedLanguages.length = 0
+    const { selectedLanguages } = this.state
+    if (value === 'All') selectedLanguages.clear()
     else {
-      if (selectedLanguages.includes(value)) {
-        selectedLanguages.splice(selectedLanguages.indexOf(value), 1)
+      if (selectedLanguages.has(value)) {
+        selectedLanguages.delete(value)
       } else {
-        selectedLanguages.push(value)
+        selectedLanguages.add(value)
       }
     }
-    this.setState(
-      { selectedLanguages: [...selectedLanguages] },
-      this.searchText()
-    )
+    this.setState({ selectedLanguages }, this.searchText())
   }
 
   renderIcon = value => {
@@ -184,7 +169,7 @@ export default class IndexPage extends Component {
       cards.push(
         <div
           key={k + v}
-          className="flex-grow sm:w-1/2 md:w-1/3 lg:w-1/4 pr-2 py-2"
+          className="flex-grow sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2"
         >
           <div className="bg-gray-200 rounded px-2 py-2 shadow h-full">
             <div
@@ -247,13 +232,6 @@ export default class IndexPage extends Component {
               Text to search for
             </label>
             <input
-              className="hidden"
-              name="langs"
-              type="text"
-              value={selectedLanguages.join(',')}
-              readOnly
-            />
-            <input
               id="search"
               type="text"
               name="search"
@@ -262,7 +240,6 @@ export default class IndexPage extends Component {
               placeholder="Text"
               onChange={e => this.setState({ inputText: e.target.value })}
             />
-            <input type="submit" className="hidden" />
           </form>
           <Flags
             onSelect={this.onSelect}

@@ -38,11 +38,11 @@ export default class Flag extends Component {
   render() {
     const { value, onSelect, selectedLanguages } = this.props
     const checked =
-      selectedLanguages.includes(value) ||
-      (value === 'All' && selectedLanguages.length === 0)
+      selectedLanguages.has(value) ||
+      (value === 'All' && selectedLanguages.size === 0)
     return (
       <div
-        className={`flex flex-row justify-around rounded-full w-20 mr-4 my-2 px-3 py-1 active:bg-gray-500 hover:bg-gray-400 bg-gray-${
+        className={`flex flex-row justify-around rounded-full w-20 mx-3 my-2 px-3 py-1 active:bg-gray-500 hover:bg-gray-400 bg-gray-${
           checked ? '400' : '200'
         }`}
         role="button"

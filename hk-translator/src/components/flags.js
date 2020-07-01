@@ -23,7 +23,7 @@ export default class Flags extends Component {
     langs.sort()
     langs.unshift('All')
     return (
-      <div className="flex flex-row flex-wrap w-full justify-start py-2">
+      <div className="flex flex-row flex-wrap w-full justify-start flex-wrap py-2">
         {langs.map(k => (
           <Flag
             key={k}
