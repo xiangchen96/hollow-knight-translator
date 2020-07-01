@@ -115,9 +115,14 @@ export default class IndexPage extends Component {
     window.onpopstate = () => {
       if (this._isMounted && window.location.href.includes('search=')) {
         const inputText = window.location.href.split('search=')[1]
-        this.setState({ inputText, selectedVariable: '' }, () => {
-          this.search()
-        })
+        let langs = getParameterByName('langs').split(',')
+        if (langs.length === 1 && langs[0] === '') langs = []
+        this.setState(
+          { inputText, selectedVariable: '', selectedLanguages: langs },
+          () => {
+            this.search()
+          }
+        )
       }
     }
   }
