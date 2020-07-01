@@ -104,8 +104,10 @@ export default class IndexPage extends Component {
       .then(text => {
         this.assets = text.split('\n')
         const inputText = getParameterByName('search')
+        let langs = getParameterByName('langs').split(',')
+        if (langs.length === 1 && langs[0] === '') langs = []
         if (inputText) {
-          this.setState({ inputText }, () => {
+          this.setState({ inputText, selectedLanguages: langs }, () => {
             this.search()
           })
         }
