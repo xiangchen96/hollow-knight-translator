@@ -99,8 +99,12 @@ export default class IndexPage extends Component {
       .then(text => {
         this.assets = text.split('\n')
         const inputText = getParameterByName('search')
+        const selectedLanguages = new Set()
+        const lang = getParameterByName('lang')
+        if (lang)
+          lang.split(',').forEach(x => x.length > 0 && selectedLanguages.add(x))
         if (inputText) {
-          this.setState({ inputText }, () => {
+          this.setState({ inputText, selectedLanguages }, () => {
             this.search()
           })
         }
@@ -239,6 +243,12 @@ export default class IndexPage extends Component {
               value={inputText}
               placeholder="Text"
               onChange={e => this.setState({ inputText: e.target.value })}
+            />
+            <input
+              type="hidden"
+              id="lang"
+              name="lang"
+              value={Array.from(selectedLanguages).sort()}
             />
           </form>
           <Flags
