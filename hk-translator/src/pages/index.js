@@ -189,7 +189,7 @@ export default class IndexPage extends Component {
               {this.renderIcon(k)}
               <p className="px-1">{showAlert ? 'Copied!' : 'Copy text'}</p>
             </div>
-            <p className="px-2 py-2">{v}</p>
+            <p className="px-2 py-2 break-words">{v}</p>
           </div>
         </div>
       )
