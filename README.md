@@ -1,19 +1,25 @@
 # hollow-knight-translator
 Search text assets based on its name.
 
-https://www.xiangchen.dev/projects/hk-translation/
+https://www.xiang.dev/hollow-knight-translator
 
 
 ## Website development
 ```
 npm run modules
-gatsby develop
+npm start
 ```
 
 ```
 npm run build
 ```
+or 
+```
+npm run build-win
+```
 
-## Trimming assets
-1. Copy `resources.assets` into the `parser` folder.
-2. `python trimm.py`
+## Exporting assets
+Export all `TextAsset` using https://github.com/Perfare/AssetStudio. And run:
+```
+python generate_json.py
+```
