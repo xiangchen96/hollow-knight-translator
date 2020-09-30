@@ -38,11 +38,9 @@ export default class IndexPage extends Component {
       const variables = []
       Object.entries(AllText).forEach(([lang, data]) => {
         Object.entries(data).forEach(([k, v]) => {
-          if (
-            !variables.includes(k) &&
-            v &&
-            v.toLowerCase().includes(inputText.toLowerCase())
-          ) {
+          if (variables.includes(k)) return
+          if (!v) return
+          if (v.toLowerCase().includes(inputText.toLowerCase()) || k.toLowerCase().includes(inputText.toLowerCase())) {
             variables.push(k)
           }
         })
@@ -145,6 +143,7 @@ export default class IndexPage extends Component {
     const { results, showAlert } = this.state
     const cards = []
     results.sort().forEach(([k, v]) => {
+      if (!v) return
       v = v.trim()
       k = k.trim()
       cards.push(
