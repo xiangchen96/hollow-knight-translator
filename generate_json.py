@@ -30,5 +30,5 @@ if __name__ == "__main__":
         root = tree.getroot()
         for i in root:
             result[lang][i.get("name")] = i.text
-    with open("front/static/all_text.json", "w", encoding="UTF-8") as f:
+    with open("src/pages/all_text.json", "w", encoding="UTF-8") as f:
         json.dump(result, f, ensure_ascii=False)

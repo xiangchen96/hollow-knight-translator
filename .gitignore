@@ -1,2 +1,7 @@
-TextAsset/
-.idea/
+node_modules/
+public/
+.cache/
+
+TextAsset/*
+!TextAsset/
+!TextAsset/.gitkeep
