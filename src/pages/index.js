@@ -142,9 +142,9 @@ const IndexPage = () => {
               role="button"
               className="hover:bg-gray-400 hover:text-black text-gray-200 cursor-pointer px-2 rounded flex flex-row"
               onClick={() => {
-                showAlert(true);
+                setShowAlert(true);
                 navigator.clipboard.writeText(v);
-                setTimeout(() => this.setState({ showAlert: false }), 1000);
+                setTimeout(() => setShowAlert(false), 1000);
               }}
             >
               {renderIcon(k)}
