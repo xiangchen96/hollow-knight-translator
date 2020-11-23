@@ -91,7 +91,7 @@ const IndexPage = ({ location }) => {
         .filter(
           ([lang, data]) =>
             (selectedLanguages.size === 0 || selectedLanguages.has(lang)) &&
-            variable in data
+            data.hasOwnProperty(variable)
         )
         .map(([lang, data]) => {
           let text = data[variable];
