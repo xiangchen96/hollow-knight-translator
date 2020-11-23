@@ -46,15 +46,29 @@ const TextResults = ({ values }) => {
 };
 
 const IndexPage = ({ location }) => {
-  const params = queryString.parse(location.search);
-
-  const [inputText, setInputText] = useState(params.search || "");
+  const [inputText, setInputText] = useState("");
   const [selectedVariable, setSelectedVariable] = useState("");
   const [variables, setVariables] = useState([]);
-  const [selectedLanguages, setSelectedLanguages] = useState(
-    new Set((params.lang || "").split(",").filter((x) => x.length > 0))
-  );
+  const [selectedLanguages, setSelectedLanguages] = useState(new Set());
   const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    const params = queryString.parse(location.search);
+    const inputText = params.search;
+    const lang = params.lang;
+
+    const selectedLanguages = new Set();
+
+    if (lang)
+      lang
+        .split(",")
+        .filter((x) => x.length > 0)
+        .forEach((x) => selectedLanguages.add(x));
+    if (inputText) {
+      setInputText(inputText);
+      setSelectedLanguages(selectedLanguages);
+    }
+  }, []);
 
   // Get text ids
   useEffect(() => {
