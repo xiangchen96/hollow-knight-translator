@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
+import queryString from "query-string";
 
 import AllText from "./all_text.json";
 import Layout from "../components/layout";
 import Flags from "../components/flags";
 import { FlagSpan } from "../components/flag";
-
-function getParameterByName(name, url) {
-  if (!url) url = window.location.href;
-
-  name = name.replace(/[[\]]/g, "\\$&");
-  let regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
-  let results = regex.exec(url);
-
-  if (!results) return null;
-  if (!results[2]) return "";
-
-  return decodeURIComponent(results[2].replace(/\+/g, " "));
-}
 
 const TextResults = ({ values }) => {
   const [showAlert, setShowAlert] = useState(false);
@@ -33,6 +21,7 @@ const TextResults = ({ values }) => {
         <div className="bg-gray-200 rounded px-2 py-2 shadow h-full">
           <div
             role="button"
+            tabIndex={0}
             className="hover:bg-gray-400 hover:text-black text-gray-200 cursor-pointer px-2 rounded flex flex-row"
             onClick={() => {
               setShowAlert(true);
@@ -56,25 +45,16 @@ const TextResults = ({ values }) => {
   return <div className="flex flex-row flex-wrap">{cards}</div>;
 };
 
-const IndexPage = () => {
-  const [inputText, setInputText] = useState("");
+const IndexPage = ({ location }) => {
+  const params = queryString.parse(location.search);
+
+  const [inputText, setInputText] = useState(params.search || "");
   const [selectedVariable, setSelectedVariable] = useState("");
   const [variables, setVariables] = useState([]);
-  const [selectedLanguages, setSelectedLanguages] = useState(new Set());
+  const [selectedLanguages, setSelectedLanguages] = useState(
+    new Set((params.lang || "").split(",").filter((x) => x.length > 0))
+  );
   const [results, setResults] = useState([]);
-
-  // Get parameters
-  useEffect(() => {
-    const inputText = getParameterByName("search");
-    const selectedLanguages = new Set();
-    const lang = getParameterByName("lang");
-    if (lang)
-      lang.split(",").forEach((x) => x.length > 0 && selectedLanguages.add(x));
-    if (inputText) {
-      setInputText(inputText);
-      setSelectedLanguages(selectedLanguages);
-    }
-  }, []);
 
   // Get text ids
   useEffect(() => {
@@ -107,18 +87,18 @@ const IndexPage = () => {
     if (variables.length === 0) {
       setResults(results);
     } else {
-      Object.entries(AllText).forEach(([lang, data]) => {
-        if (
-          (selectedLanguages.size === 0 || selectedLanguages.has(lang)) &&
-          variable in data
-        ) {
+      results = Object.entries(AllText)
+        .filter(
+          ([lang, data]) =>
+            (selectedLanguages.size === 0 || selectedLanguages.has(lang)) &&
+            variable in data
+        )
+        .map(([lang, data]) => {
           let text = data[variable];
           text = text.replaceAll("<page>", "\n\n");
           text = text.replaceAll("<br>", "\n");
-          //TODO: replace <br>, <page>?
-          results.push([lang, text]);
-        }
-      });
+          return [lang, text];
+        });
       setResults(results);
     }
   }, [variables, selectedLanguages, selectedVariable]);
