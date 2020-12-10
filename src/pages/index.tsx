@@ -18,11 +18,11 @@ const TextResults = ({ values }: { values: Array<[string, string]> }) => {
         key={k + v}
         className="flex-grow sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2"
       >
-        <div className="bg-gray-200 rounded px-2 py-2 shadow h-full">
+        <div className="bg-gray-100 rounded px-2 py-2 shadow h-full">
           <div
             role="button"
             tabIndex={0}
-            className="hover:bg-gray-400 hover:text-black text-gray-200 cursor-pointer px-2 rounded flex flex-row"
+            className="focus:outline-none hover:bg-gray-400 hover:text-black text-gray-100 cursor-pointer px-2 rounded flex flex-row"
             onClick={() => {
               setShowAlert(true);
               navigator.clipboard.writeText(v);
@@ -134,18 +134,18 @@ const IndexPage = ({ location }: PageProps) => {
   return (
     <Layout>
       <div>
-        <form className="mx-2">
+        <form className="mx-auto w-4/5">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="text"
           >
-            Text to search for
+            Search
           </label>
           <input
             id="search"
             type="text"
             name="search"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border w-full rounded-3xl py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             value={inputText}
             placeholder="Text"
             onChange={(e) => setInputText(e.target.value)}
@@ -159,7 +159,7 @@ const IndexPage = ({ location }: PageProps) => {
         </form>
         <Flags onSelect={onSelect} selectedLanguages={selectedLanguages} />
         <select
-          className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 mx-2 py-2 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+          className="block appearance-none w-full border text-gray-700 mx-2 py-2 my-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
           value={selectedVariable}
           required
           onChange={(event) => {
