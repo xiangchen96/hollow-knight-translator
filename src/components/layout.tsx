@@ -40,7 +40,7 @@ const Layout = ({ children }: LayoutProps) => (
             paddingTop: 0,
           }}
         >
-          <div className="h-20 m-auto font-light text-3xl py-3">
+          <div className="h-20 m-auto font-light text-2xl sm:text-3xl whitespace-no-wrap py-3">
             <h1 style={{ margin: 0 }}>
               <Link
                 to="/"

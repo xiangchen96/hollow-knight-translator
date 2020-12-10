@@ -158,20 +158,22 @@ const IndexPage = ({ location }: PageProps) => {
           />
         </form>
         <Flags onSelect={onSelect} selectedLanguages={selectedLanguages} />
-        <select
-          className="block appearance-none w-full border text-gray-700 mx-2 py-2 my-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
-          value={selectedVariable}
-          required
-          onChange={(event) => {
-            setSelectedVariable(event.target.value);
-          }}
-        >
-          {variables.map((a) => (
-            <option key={a} value={a}>
-              {a}
-            </option>
-          ))}
-        </select>
+        <div className="px-2">
+          <select
+            className="block appearance-none w-full border text-gray-700 py-2 my-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
+            value={selectedVariable}
+            required
+            onChange={(event) => {
+              setSelectedVariable(event.target.value);
+            }}
+          >
+            {variables.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
+          </select>
+        </div>
         <TextResults values={results} />
       </div>
     </Layout>

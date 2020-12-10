@@ -62,7 +62,7 @@ const Flag = ({ value, onSelect, selectedLanguages }: FlagProps) => {
     (value === "All" && selectedLanguages.size === 0);
   return (
     <div
-      className={`flex flex-row text-sm justify-around rounded-full w-20 mx-3 my-2 px-3 py-1 hover:opacity-75 ${
+      className={`flex flex-row text-sm justify-around rounded-full w-20 mx-1 sm:mx-3 my-2 px-3 py-1 hover:opacity-75 ${
         checked ? "bg-gray-400" : "bg-gray-300"
       }`}
       role="button"
@@ -82,7 +82,7 @@ type FlagsProps = {
 };
 
 const Flags = ({ onSelect, selectedLanguages }: FlagsProps) => (
-  <div className="flex flex-row flex-wrap w-full justify-start py-2 my-3">
+  <div className="flex flex-row flex-wrap justify-start py-2 my-3 m-auto">
     {langs.map((k) => (
       <Flag
         key={k}
