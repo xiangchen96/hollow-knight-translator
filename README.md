@@ -10,10 +10,6 @@ https://www.xiang.dev/hollow-knight-translator
 npm start
 ```
 
-```
-npm run build
-```
-
 ## Exporting assets
 
 Export all `TextAsset` using https://github.com/Perfare/AssetStudio. And run:
