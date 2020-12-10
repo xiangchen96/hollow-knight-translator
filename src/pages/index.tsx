@@ -159,7 +159,7 @@ const IndexPage = ({ location }: PageProps) => {
         </form>
         <Flags onSelect={onSelect} selectedLanguages={selectedLanguages} />
         <select
-          className="block appearance-none w-full border text-gray-700 mx-2 py-2 my-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:border-gray-500"
+          className="block appearance-none w-full border text-gray-700 mx-2 py-2 my-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
           value={selectedVariable}
           required
           onChange={(event) => {
