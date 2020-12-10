@@ -11,18 +11,22 @@ const fs = require("fs");
 exports.onPreInit = () => {
   if (process.argv[2] === "build") {
     fs.rmdirSync(path.join(__dirname, "docs"), { recursive: true });
-    fs.renameSync(
-      path.join(__dirname, "public"),
-      path.join(__dirname, "public_dev")
-    );
+    if (fs.existsSync(path.join(__dirname, "public"))) {
+      fs.renameSync(
+        path.join(__dirname, "public"),
+        path.join(__dirname, "public_dev")
+      );
+    }
   }
 };
 
 exports.onPostBuild = () => {
   fs.renameSync(path.join(__dirname, "public"), path.join(__dirname, "docs"));
   fs.closeSync(fs.openSync(path.join(__dirname, "docs", ".nojekyll"), "w"));
-  fs.renameSync(
-    path.join(__dirname, "public_dev"),
-    path.join(__dirname, "public")
-  );
+  if (fs.existsSync(path.join(__dirname, "public_dev"))) {
+    fs.renameSync(
+      path.join(__dirname, "public_dev"),
+      path.join(__dirname, "public")
+    );
+  }
 };
