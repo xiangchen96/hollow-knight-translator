@@ -54,7 +54,7 @@ const Layout = ({ children }: LayoutProps) => (
           </div>
           {children}
         </div>
-        <footer className="flex my-1">
+        <footer className="flex my-4">
           <p className="m-auto font-light">
             Built by Xiang Chen | {new Date().getFullYear()}
           </p>
