@@ -67,7 +67,11 @@ const Layout = ({ children }: LayoutProps) => (
                 ></path>
               </svg>
             </a>
-            Built by Xiang Chen | {new Date().getFullYear()}
+            Built by
+            <a className="font-normal mx-1" href="https://www.xiang.dev/about">
+              Xiang Chen
+            </a>
+            | {new Date().getFullYear()}
           </p>
         </footer>
       </div>
