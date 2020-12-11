@@ -136,7 +136,7 @@ const IndexPage = ({ location }: PageProps) => {
   return (
     <Layout>
       <div>
-        <form className="mx-auto w-4/5">
+        <form className="mx-auto sm:w-4/5">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
             htmlFor="text"
