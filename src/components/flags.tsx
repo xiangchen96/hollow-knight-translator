@@ -82,7 +82,7 @@ type FlagsProps = {
 };
 
 const Flags = ({ onSelect, selectedLanguages }: FlagsProps) => (
-  <div className="flex flex-row flex-wrap justify-start py-2 my-3 m-auto">
+  <div className="grid py-2 my-3 m-auto grid-cols-3 sm:grid-cols-5 lg:grid-cols-9">
     {langs.map((k) => (
       <Flag
         key={k}
