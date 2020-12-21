@@ -8,42 +8,30 @@ import Flags, { FlagSpan } from "../components/flags";
 
 const TextResults = ({ values }: { values: Array<[string, string]> }) => {
   const [showAlert, setShowAlert] = useState(false);
-  const cards: Array<JSX.Element> = [];
-  values.sort().forEach(([k, v]) => {
-    if (!v) return;
-    v = v.trim();
-    k = k.trim();
-    cards.push(
-      <div
-        key={k + v}
-        className="flex-grow sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2"
-      >
-        <div className="bg-gray-100 rounded px-2 py-2 shadow h-full">
-          <div
-            role="button"
-            tabIndex={0}
-            className="focus:outline-none hover:bg-gray-400 hover:text-black text-gray-100 cursor-pointer px-2 rounded flex flex-row"
-            onClick={() => {
-              setShowAlert(true);
-              navigator.clipboard.writeText(v);
-              setTimeout(() => setShowAlert(false), 1000);
-            }}
-          >
-            <FlagSpan value={k} />
-            <p className="px-1 whitespace-pre">
-              {showAlert ? "Copied!   " : "Copy text"}
-            </p>
-          </div>
-          <p
-            className="px-2 py-2 break-words"
-            style={{ whiteSpace: "pre-line" }}
-          >
-            {v}
+  const cards: Array<JSX.Element> = values.sort().map(([k, v]) => (
+    <div key={k + v} className="flex-grow sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 py-2">
+      <div className="bg-gray-100 rounded px-2 py-2 shadow h-full">
+        <div
+          role="button"
+          tabIndex={0}
+          className="focus:outline-none hover:bg-gray-400 hover:text-black text-gray-100 cursor-pointer px-2 rounded flex flex-row"
+          onClick={() => {
+            setShowAlert(true);
+            navigator.clipboard.writeText(v);
+            setTimeout(() => setShowAlert(false), 1000);
+          }}
+        >
+          <FlagSpan value={k} />
+          <p className="px-1 whitespace-pre">
+            {showAlert ? "Copied!   " : "Copy text"}
           </p>
         </div>
+        <p className="px-2 py-2 break-words" style={{ whiteSpace: "pre-line" }}>
+          {v}
+        </p>
       </div>
-    );
-  });
+    </div>
+  ));
   return <div className="flex flex-row flex-wrap">{cards}</div>;
 };
 
@@ -111,12 +99,7 @@ const IndexPage = ({ location }: PageProps) => {
             data.hasOwnProperty(variable) &&
             data[variable]
         )
-        .map(([lang, data]) => {
-          let text = data[variable];
-          text = text.replaceAll("<page>", "\n\n");
-          text = text.replaceAll("<br>", "\n");
-          return [lang, text];
-        });
+        .map(([lang, data]) => [lang, data[variable]]);
       setResults(results);
     }
   }, [variables, selectedLanguages, selectedVariable]);
