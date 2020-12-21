@@ -33,6 +33,7 @@ if __name__ == "__main__":
                 continue
             text = i.text.replace("<br>", "\n")
             text = text.replace("<page>", "\n\n")
+            text = text.replace("<Page>", "\n\n")
             result[lang][i.get("name")] = text
     with open("src/pages/all_text.json", "w", encoding="UTF-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
