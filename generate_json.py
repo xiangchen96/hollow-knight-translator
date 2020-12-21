@@ -29,6 +29,7 @@ if __name__ == "__main__":
         tree = ET.parse(file)
         root = tree.getroot()
         for i in root:
-            result[lang][i.get("name")] = i.text
+            if i.text:
+                result[lang][i.get("name")] = i.text
     with open("src/pages/all_text.json", "w", encoding="UTF-8") as f:
         json.dump(result, f, ensure_ascii=False, indent=2)
