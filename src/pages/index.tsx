@@ -9,6 +9,11 @@ import Form from "../components/Form";
 
 import AllText from "./all_text.json";
 
+const normalize = (str: string) => {
+  str = str.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+  return str.toLowerCase()
+}
+
 const IndexPage = ({ location }: PageProps) => {
   const [inputText, setInputText] = useState("");
   const [selectedVariable, setSelectedVariable] = useState("");
@@ -40,14 +45,15 @@ const IndexPage = ({ location }: PageProps) => {
     if (inputText === "") {
       setVariables([]);
     } else {
+      const searchStr = normalize(inputText)
       const variables: Array<string> = [];
       Object.entries(AllText).forEach(([lang, data]: [string, object]) => {
         Object.entries(data).forEach(([k, v]: [string, string]) => {
           if (variables.includes(k)) return;
           if (!v) return;
           if (
-            v.toLowerCase().includes(inputText.toLowerCase()) ||
-            k.toLowerCase().includes(inputText.toLowerCase())
+            normalize(v).includes(searchStr) ||
+            normalize(k).includes(searchStr)
           ) {
             variables.push(k);
           }
