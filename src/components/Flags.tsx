@@ -62,7 +62,7 @@ const Flag = ({ value, onSelect, selectedLanguages }: FlagProps) => {
     (value === "All" && selectedLanguages.size === 0);
   return (
     <div
-      className={`flex flex-row text-sm justify-around rounded-full w-20 mx-auto my-2 px-3 py-1 hover:opacity-75 ${
+      className={`flex flex-row text-sm justify-around rounded-full w-16 sm:w-20 mx-auto my-2 px-3 py-1 hover:opacity-75 ${
         checked ? "bg-gray-400" : "bg-gray-300"
       }`}
       role="button"
