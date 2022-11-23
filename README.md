@@ -2,8 +2,6 @@
 
 Search text assets based on its name.
 
-https://www.xiang.dev/hollow-knight-translator
-
 ## Website development
 
 ```
